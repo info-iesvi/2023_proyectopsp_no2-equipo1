@@ -44,6 +44,8 @@ Todos en el mismo proyecto, funcionando como una sola aplicación Spring.
 
 Dividida en distintos proyectos, mostrado aquí en la misma carpeta.
 
+(Captura hecha por Adan, por el nombre del repositorio, este chaval....)
+
 ![](images/act_repo.png)
 
 ![](images/genero.png)
@@ -55,49 +57,100 @@ Dividida en distintos proyectos, mostrado aquí en la misma carpeta.
 ![](images/videojuegos.png)
 
 ### Docker-compose
+    
+* Primero ponemos la version que es, en nuestro caso la 3.
 
-#### EXPLICACIÓN DEL FICHERO
+* Luego creamos un service para todos los microservicios
+
+* Por cada microservicio asociamos una imagen que esta subida al repositorio de Miguel, un nombre al contenedor, unos puertos, una dependencia a base de datos y unas variables de entorno para declarar el usuario, password y url de la base de datos, en nuestro caso MYSQL.
+
+* Lo unico que debe cambiar por cada microservicio son los puertos que deben ser diferentes.
+
+
+    version: '3'
+    services:
+    usuarios:
+    image: 'miguelchaves/proyectopsp-equipo1:Usuarios'
+    container_name: microservicios-usuarios
+    environment:
+    spring.datasource.url: jdbc:mysql://microservicios-db:3306/proyecto
+    spring.datasource.username: usuario
+    spring.datasource.password: usuario
+    ports:
+    - "8080:8080"
+    depends_on:
+      - db
+      links:
+      - db
+      videojuegos:
+      image: 'miguelchaves/proyectopsp-equipo1:Videojuegos'
+      container_name: microservicios-videojuegos
+      environment:
+      spring.datasource.url: jdbc:mysql://microservicios-db:3306/proyecto
+      spring.datasource.username: usuario
+      spring.datasource.password: usuario
+      ports:
+      - "8081:8081"
+      depends_on:
+      - db
+      links:
+      - db
+      items:
+      image: 'miguelchaves/proyectopsp-equipo1:Items'
+      container_name: microservicios-items
+      environment:
+      spring.datasource.url: jdbc:mysql://microservicios-db:3306/proyecto
+      spring.datasource.username: usuario
+      spring.datasource.password: usuario
+      ports:
+      - "8082:8082"
+      depends_on:
+      - db
+      links:
+      - db
+      generos:
+      image: 'miguelchaves/proyectopsp-equipo1:Genero'
+      container_name: microservicios-generos
+      environment:
+      spring.datasource.url: jdbc:mysql://microservicios-db:3306/proyecto
+      spring.datasource.username: usuario
+      spring.datasource.password: usuario
+      ports:
+      - "8083:8083"
+      depends_on:
+      - db
+      links:
+      - db
+      db:
+      image: mysql:latest
+      container_name: microservicios-db
+      environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: usuario
+      MYSQL_DATABASE: proyecto
+      ports:
+      - "3306:3306"
+
 
 #### UTILIZACIÓN
 
 ### Pruebas de funcionamiento
 
-#### GESTIÓN DE EMPLEADOS
-
-Creando un empleado:
-
-![img.png](images/doc2img1.png)
-
-Viendo todos los empleados:
-
-![img.png](images/doc2img2.png)
-
 #### GESTIÓN DE GÉNEROS
-
-Creando un género:
-
-![img.png](images/doc2img6.png)
 
 Viendo todos los géneros:
 
-![img.png](images/doc2img7.png)
+![generosget.png](img%2Fgenerosget.png)
 
 #### GESTIÓN DE VIDEOJUEGOS
 
-Creando un juego:
-
-![img.png](images/doc2img11.png)
-
 Mostrando todos los juegos:
 
-![img.png](images/doc2img12.png)
+![videojuegosget.png](img%2Fvideojuegosget.png)
 
 #### GESTIÓN DE ITEMS
 
-Creando un item:
-
-![img.png](images/doc2img17.png)
-
 Mostrando todos los items:
 
-![img.png](images/doc2img18.png)
+![itemsget.png](img%2Fitemsget.png)
