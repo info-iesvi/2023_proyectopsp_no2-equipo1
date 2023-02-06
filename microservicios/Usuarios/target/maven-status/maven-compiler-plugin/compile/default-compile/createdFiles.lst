@@ -1,0 +1,12 @@
+appVGShop\gestionUsuarios\application\service\impl\EmployeeServiceImpl.class
+appVGShop\shared\config\EndpointUrls.class
+appVGShop\gestionUsuarios\application\converter\EmployeeDTOConverter.class
+appVGShop\gestionUsuarios\domain\dto\EmployeeDTO.class
+appVGShop\shared\config\BaseConfiguration.class
+appVGShop\gestionUsuarios\domain\Employee.class
+appVGShop\gestionUsuarios\domain\dto\EmployeeDTOCreator.class
+appVGShop\gestionUsuarios\application\service\EmployeeService.class
+appVGShop\gestionUsuarios\infra\EmployeeRepository.class
+appVGShop\Application.class
+appVGShop\gestionUsuarios\infra\controller\EmployeeAPI.class
+appVGShop\gestionUsuarios\infra\controller\EmployeeController.class

@@ -1,0 +1,12 @@
+appVGShop\gestionVideojuegos\infra\controller\VideogameAPI.class
+appVGShop\shared\config\EndpointUrls.class
+appVGShop\shared\config\BaseConfiguration.class
+appVGShop\gestionVideojuegos\application\service\impl\VideogameServiceImpl.class
+appVGShop\gestionVideojuegos\application\service\VideogameService.class
+appVGShop\gestionVideojuegos\domain\Videogame.class
+appVGShop\gestionVideojuegos\application\converter\VideogameDTOConverter.class
+appVGShop\gestionVideojuegos\domain\dto\VideogameDTO.class
+appVGShop\gestionVideojuegos\domain\dto\VideogameDTOCreator.class
+appVGShop\Application.class
+appVGShop\gestionVideojuegos\infra\controller\VideogameController.class
+appVGShop\gestionVideojuegos\infra\VideogameRepository.class

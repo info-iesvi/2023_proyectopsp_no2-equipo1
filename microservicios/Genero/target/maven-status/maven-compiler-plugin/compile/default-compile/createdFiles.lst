@@ -1,0 +1,12 @@
+appVGShop\shared\config\EndpointUrls.class
+appVGShop\shared\config\BaseConfiguration.class
+appVGShop\gestionGenero\infra\controller\GenreAPI.class
+appVGShop\gestionGenero\infra\GenreRepository.class
+appVGShop\gestionGenero\domain\dto\GenreDTO.class
+appVGShop\gestionGenero\application\converter\GenreDTOConverter.class
+appVGShop\gestionGenero\application\service\impl\GenreServiceImpl.class
+appVGShop\gestionGenero\infra\controller\GenreController.class
+appVGShop\gestionGenero\application\service\GenreService.class
+appVGShop\gestionGenero\domain\Genre.class
+appVGShop\Application.class
+appVGShop\gestionGenero\domain\dto\GenreDTOCreator.class

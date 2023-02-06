@@ -1,0 +1,25 @@
+version: '3'
+services:
+  main:
+    image: 'miguelchaves/proyectopsp-equipo1:2223_proyectopsp-equipo1'
+    container_name: proyecto-psp-app
+    environment:
+      spring.datasource.url: jdbc:mysql://proyecto-psp-db:3306/proyecto
+      spring.datasource.username: usuario
+      spring.datasource.password: usuario
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    links:
+      - db:proyecto-psp-db
+  db:
+    image: mysql:latest
+    container_name: proyecto-psp-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: usuario
+      MYSQL_PASSWORD: usuario
+      MYSQL_DATABASE: proyecto
+    ports:
+      - "3306:3306"

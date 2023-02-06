@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Items/2223_proyectopsp-equipo1.iml" filepath="$PROJECT_DIR$/Items/2223_proyectopsp-equipo1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Genero/2223_proyectopsp-equipo1 (1).iml" filepath="$PROJECT_DIR$/Genero/2223_proyectopsp-equipo1 (1).iml" />
+      <module fileurl="file://$PROJECT_DIR$/Usuarios/2223_proyectopsp-equipo1 (2).iml" filepath="$PROJECT_DIR$/Usuarios/2223_proyectopsp-equipo1 (2).iml" />
+      <module fileurl="file://$PROJECT_DIR$/Genero/Genero.iml" filepath="$PROJECT_DIR$/Genero/Genero.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Items/Items.iml" filepath="$PROJECT_DIR$/Items/Items.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Usuarios/Usuarios.iml" filepath="$PROJECT_DIR$/Usuarios/Usuarios.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Videojuegos/Videojuegos.iml" filepath="$PROJECT_DIR$/Videojuegos/Videojuegos.iml" />
+      <module fileurl="file://$PROJECT_DIR$/microservicios.iml" filepath="$PROJECT_DIR$/microservicios.iml" />
+    </modules>
+  </component>
+</project>
