@@ -56,4 +56,12 @@ public interface EmployeeService {
      * @return 204 sin contenido.
      */
     public ResponseEntity<?> deleteUser(Integer id);
+
+    /**
+     * Método de enviado de notificaciones al gmail del servidor
+     * Se indica la cabecera y el cuerpo para enviar un mensaje personalizado
+     * @param header
+     * @param body
+     */
+    public void notifyGmail(String header, String body);
 }
