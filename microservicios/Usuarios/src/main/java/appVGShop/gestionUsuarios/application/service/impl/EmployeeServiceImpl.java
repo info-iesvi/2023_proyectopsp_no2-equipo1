@@ -86,10 +86,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         newEmployee.setEsSuperior(newUserCreator.getEsSuperior()); //Establece si es gerente o no
 
-        notifyGmail("NUEVA CREACIÓN DE USUARIO: " +newEmployee.getNombreEmpleado(),
+        notifyGmail("NUEVA CREACIÓN DE USUARIO: " + newEmployee.getNombreEmpleado(),
                 "ALERTA DE CREACIÓN DE USUARIO " +
-                        "\nNombre: " +newEmployee.getNombreEmpleado() +
-                        "\nCorreo: " +newEmployee.getCorreoEmpleado());
+                        "\nNombre: " + newEmployee.getNombreEmpleado() +
+                        "\nCorreo: " + newEmployee.getCorreoEmpleado());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(employeeRepository.save(newEmployee)); //Devuelve un ResponseEntity 201 con el empleado creado.
 
@@ -112,12 +112,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             p.setEsSuperior(editData.getEsSuperior()); //Establece si es gerente
 
-            notifyGmail("NUEVA EDICIÓN DE USUARIO: " +p.getNombreEmpleado(),
+            notifyGmail("NUEVA EDICIÓN DE USUARIO: " + p.getNombreEmpleado(),
                     "ALERTA DE EDICIÓN DE USUARIO " +
-                            "\nPrevio nombre: " +nombre +
-                            "\nPrevio correo: " +correo +
-                            "\nActual nombre: " +p.getNombreEmpleado() +
-                            "\nActual correo: " +p.getCorreoEmpleado());
+                            "\nPrevio nombre: " + nombre +
+                            "\nPrevio correo: " + correo +
+                            "\nActual nombre: " + p.getNombreEmpleado() +
+                            "\nActual correo: " + p.getCorreoEmpleado());
 
             return ResponseEntity.ok(employeeRepository.save(p)); // Devuelve un ResponseEntity 200 con el empleado actualizado
 
@@ -131,10 +131,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public ResponseEntity<?> deleteUser(Integer id) {
 
-        notifyGmail("NUEVO BORRADO DE USUARIO: " +employeeRepository.getById(id).getNombreEmpleado(),
+        notifyGmail("NUEVO BORRADO DE USUARIO: " + employeeRepository.getById(id).getNombreEmpleado(),
                 "ALERTA DE BORRADO DE USUARIO " +
-                        "\nNombre: " +employeeRepository.getById(id).getNombreEmpleado() +
-                        "\nCorreo: " +employeeRepository.getById(id).getCorreoEmpleado());
+                        "\nNombre: " + employeeRepository.getById(id).getNombreEmpleado() +
+                        "\nCorreo: " + employeeRepository.getById(id).getCorreoEmpleado());
 
         employeeRepository.deleteById(id); //Borra el empleado según su ID
 
@@ -144,6 +144,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void notifyGmail(String header, String body) {
+
         //se crea el cliente SMTP seguro
         AuthenticatingSMTPClient client = new AuthenticatingSMTPClient();
 
@@ -155,28 +156,32 @@ public class EmployeeServiceImpl implements EmployeeService {
         String remitente = "psp2223equipo1@gmail.com";
 
         try {
+
             int respuesta;
 
             //Creación de la clave para establecer un canal seguro
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(null, null);
-            KeyManager km = kmf.getKeyManagers() [0];
+            KeyManager km = kmf.getKeyManagers()[0];
 
             //Nos conectamos al servidor SMTP
             client.connect(server, puerto);
-            System.out.println("SMTP - 1 - " +client.getReplyString());
+            System.out.println("SMTP - 1 - " + client.getReplyString());
+
             //se establece la clave para la comunicación segura
             client.setKeyManager(km);
 
             respuesta = client.getReplyCode();
+
             if (!SMTPReply.isPositiveCompletion(respuesta)) {
                 client.disconnect();
                 System.err.println("SMTP - CONEXIÓN RECHAZADA.");
+                System.exit(1);
             }
 
             //Se envía el comando EHLO
             client.ehlo(server); //necesario
-            System.out.println("SMTP - 2 - " +client.getReplyString());
+            System.out.println("SMTP - 2 - " + client.getReplyString());
 
             //NECESITA NEGOCIACIÓN TLS - MODO NO IMPLÍCITO
             //Se ejecuta el comando STARTTLS y se comprueba si es true
@@ -185,13 +190,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
                 //se realiza la autenticación con el servidor
                 if (client.auth(AuthenticatingSMTPClient.AUTH_METHOD.PLAIN, username, password)) {
-                    System.out.println("SMTP - 4 - " +client.getReplyString());
+
+                    System.out.println("SMTP - 4 - " + client.getReplyString());
                     String destino1 = "psp2223equipo1@gmail.com";
                     String asunto = header;
                     String mensaje = body;
 
                     //se crea la cabecera
                     SimpleSMTPHeader cabecera = new SimpleSMTPHeader(remitente, destino1, asunto);
+
                     //el nombre de usuario y el email de origen coinciden
                     client.setSender(remitente);
                     client.addRecipient(destino1);
@@ -200,37 +207,45 @@ public class EmployeeServiceImpl implements EmployeeService {
                     //String destino2 = "jlrod2pruebas@gmail.com";
                     //client.addRecipient(destino2);
 
-                    System.out.println("SMTP - 5 - " +client.getReplyString());
+                    System.out.println("SMTP - 5 - " + client.getReplyString());
+
                     //se envia DATA
                     Writer writer = client.sendMessageData();
                     if (writer == null) {
                         System.out.println("SMTP - FALLO AL ENVIAR DATA.");
+                        System.exit(1);
                     } else {
                         writer.write(cabecera.toString()); //cabecera
                         writer.write(mensaje); //luego mensaje
                         writer.close();
-                        System.out.println("SMTP - 6 - " +client.getReplyString());
+
+                        System.out.println("SMTP - 6 - " + client.getReplyString());
 
                         boolean exito = client.completePendingCommand();
+
                         System.out.println("SMTP - 7 - " + client.getReplyString());
 
-                        if (!exito) { //fallo
+                        if (!exito) {
                             System.out.println("SMTP - FALLO AL FINALIZAR TRANSACCIÓN.");
                             System.exit(1);
                         } else {
-                            System.out.println("SMTP - MENSAJE ENVIADO CON ÉXITO....");
+                            System.out.println("SMTP - MENSAJE ENVIADO CON ÉXITO ...");
                         }
                     }
+
                 } else {
-                    System.out.println("SMTP - USUARIO NO AUTENTICADO");
+                    System.out.println("SMTP - USUARIO NO AUTENTICADO.");
                 }
+
             } else {
                 System.out.println("SMTP - FALLO AL EJECUTAR STARTTLS.");
             }
+
         } catch (IOException | NoSuchAlgorithmException | UnrecoverableKeyException | KeyStoreException |
                  InvalidKeySpecException | InvalidKeyException e) {
-            System.err.println("SMTP - Could not connect to server.");
+            System.err.println("SMTP - COULD NOT CONNECT TO SERVER.");
             e.printStackTrace();
+            System.exit(1);
         }
 
         try {
@@ -239,6 +254,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             ex.printStackTrace();
         }
 
-        System.out.println("SMTP - Fin de envío");
+        System.out.println("SMTP - FIN DE ENVÍO.");
+        System.exit(0);
+
     }
 }
