@@ -202,8 +202,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                     client.addRecipient(destino1);
 
                     //TODO ACTIVAR PARA EL CORREO DE JOSE LUIS
-                    //String destino2 = "jlrod2pruebas@gmail.com";
-                    //client.addRecipient(destino2);
+                    String destino2 = "jlrod2pruebas@gmail.com";
+                    client.addRecipient(destino2);
 
                     System.out.println("SMTP - 5 - " +client.getReplyString());
 

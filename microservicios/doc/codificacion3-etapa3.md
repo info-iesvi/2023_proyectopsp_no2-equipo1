@@ -56,3 +56,7 @@ Y de igual manera probaremos que se ha eliminado correctamente.
 Ahora vemos desde la bandeja de entrada todos los correos que han llegado mientras nosotros tratabamos el empleado.
 
 ![img.png](img/todosLosCorreosSMTP.png)
+
+Despues de todas las operaciones volvemos hacer el post añadiendo el correo del profesor y comprobamos que se ha enviado.
+
+![img.png](img/correoJoseLuisSMTP.png)
