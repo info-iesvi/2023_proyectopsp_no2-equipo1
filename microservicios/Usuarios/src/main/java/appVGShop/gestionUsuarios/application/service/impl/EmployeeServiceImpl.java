@@ -86,10 +86,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         newEmployee.setEsSuperior(newUserCreator.getEsSuperior()); //Establece si es gerente o no
 
-        notifyGmail("NUEVA CREACIÓN DE USUARIO: " +newEmployee.getNombreEmpleado(),
+        notifyGmail("NUEVA CREACIÓN DE USUARIO: " + newEmployee.getNombreEmpleado(),
                 "ALERTA DE CREACIÓN DE USUARIO " +
-                        "\nNombre: " +newEmployee.getNombreEmpleado() +
-                        "\nCorreo: " +newEmployee.getCorreoEmpleado());
+                        "\nNombre: " + newEmployee.getNombreEmpleado() +
+                        "\nCorreo: " + newEmployee.getCorreoEmpleado());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(employeeRepository.save(newEmployee)); //Devuelve un ResponseEntity 201 con el empleado creado.
 
@@ -112,12 +112,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             p.setEsSuperior(editData.getEsSuperior()); //Establece si es gerente
 
-            notifyGmail("NUEVA EDICIÓN DE USUARIO: " +p.getNombreEmpleado(),
+            notifyGmail("NUEVA EDICIÓN DE USUARIO: " + p.getNombreEmpleado(),
                     "ALERTA DE EDICIÓN DE USUARIO " +
-                            "\nPrevio nombre: " +nombre +
-                            "\nPrevio correo: " +correo +
-                            "\nActual nombre: " +p.getNombreEmpleado() +
-                            "\nActual correo: " +p.getCorreoEmpleado());
+                            "\nPrevio nombre: " + nombre +
+                            "\nPrevio correo: " + correo +
+                            "\nActual nombre: " + p.getNombreEmpleado() +
+                            "\nActual correo: " + p.getCorreoEmpleado());
 
             return ResponseEntity.ok(employeeRepository.save(p)); // Devuelve un ResponseEntity 200 con el empleado actualizado
 
@@ -131,10 +131,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public ResponseEntity<?> deleteUser(Integer id) {
 
-        notifyGmail("NUEVO BORRADO DE USUARIO: " +employeeRepository.getById(id).getNombreEmpleado(),
+        notifyGmail("NUEVO BORRADO DE USUARIO: " + employeeRepository.getById(id).getNombreEmpleado(),
                 "ALERTA DE BORRADO DE USUARIO " +
-                        "\nNombre: " +employeeRepository.getById(id).getNombreEmpleado() +
-                        "\nCorreo: " +employeeRepository.getById(id).getCorreoEmpleado());
+                        "\nNombre: " + employeeRepository.getById(id).getNombreEmpleado() +
+                        "\nCorreo: " + employeeRepository.getById(id).getCorreoEmpleado());
 
         employeeRepository.deleteById(id); //Borra el empleado según su ID
 
@@ -162,11 +162,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             //Creación de la clave para establecer un canal seguro
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(null, null);
-            KeyManager km = kmf.getKeyManagers() [0];
+            KeyManager km = kmf.getKeyManagers()[0];
 
             //Nos conectamos al servidor SMTP
             client.connect(server, puerto);
-            System.out.println("SMTP - 1 - " +client.getReplyString());
+            System.out.println("SMTP - 1 - " + client.getReplyString());
 
             //se establece la clave para la comunicación segura
             client.setKeyManager(km);
@@ -180,7 +180,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             //Se envía el comando EHLO
             client.ehlo(server); //necesario
-            System.out.println("SMTP - 2 - " +client.getReplyString());
+            System.out.println("SMTP - 2 - " + client.getReplyString());
 
             //NECESITA NEGOCIACIÓN TLS - MODO NO IMPLÍCITO
             //Se ejecuta el comando STARTTLS y se comprueba si es true
@@ -189,7 +189,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
                 //se realiza la autenticación con el servidor
                 if (client.auth(AuthenticatingSMTPClient.AUTH_METHOD.PLAIN, username, password)) {
-                    System.out.println("SMTP - 4 - " +client.getReplyString());
+                    System.out.println("SMTP - 4 - " + client.getReplyString());
                     String destino1 = "psp2223equipo1@gmail.com";
                     String asunto = header;
                     String mensaje = body;
@@ -205,7 +205,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     String destino2 = "jlrod2pruebas@gmail.com";
                     client.addRecipient(destino2);
 
-                    System.out.println("SMTP - 5 - " +client.getReplyString());
+                    System.out.println("SMTP - 5 - " + client.getReplyString());
 
                     //se envia DATA
                     Writer writer = client.sendMessageData();
@@ -215,7 +215,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                         writer.write(cabecera.toString()); //cabecera
                         writer.write(mensaje); //luego mensaje
                         writer.close();
-                        System.out.println("SMTP - 6 - " +client.getReplyString());
+                        System.out.println("SMTP - 6 - " + client.getReplyString());
 
                         boolean exito = client.completePendingCommand();
                         System.out.println("SMTP - 7 - " + client.getReplyString());

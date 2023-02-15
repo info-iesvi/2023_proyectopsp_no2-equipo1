@@ -15,7 +15,55 @@ Módulo: PSP
 
 #### Comandos SMTP
 
+* Se crea un cliente SMTP seguro. 
 
+###### AuthenticatingSMTPClient client = new AuthenticatingSMTPClient();
+
+* Se crea un par de claves para establecer un canal seguro.
+
+###### KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+###### kmf.init(null, null);
+###### KeyManager km = kmf.getKeyManagers() [0];
+
+* Nos conectamos al servidor SMTP (smtp.gmail.com) desde el puerto 587.
+
+###### client.connect(server, puerto);
+
+* Se establece la clave para la comunicación segura.
+
+###### client.setKeyManager(km);
+
+* Enviamos el comando "EHLO" para abrir una sesión con el servidor.
+
+###### client.ehlo(server);
+
+* Se establece la negociación TLS de manera no implícita ejecutando el comando STARTLS.
+
+###### if (client.execTLS())
+
+* Se realiza la autenticación con el servidor con nuestro correo y nuestra contraseña.
+
+###### if (client.auth(AuthenticatingSMTPClient.AUTH_METHOD.PLAIN, username, password)) {
+
+* Se crea la cabecera del correo con el remitente, el destino y el asunto.
+
+###### SimpleSMTPHeader cabecera = new SimpleSMTPHeader(remitente, destino1, asunto);
+
+* Ponemos la dirección de correo del remitente con lo equivalente al comando "MAIL FROM" y las de destino con lo equivalente al comando "RCPT TO".
+
+###### client.setSender(remitente);
+###### client.addRecipient(destino1);
+###### String destino2 = "jlrod2pruebas@gmail.com";
+###### client.addRecipient(destino2);
+
+* Se envía el contenido del mensaje con lo equivalente al comando "DATA" con un writer.
+
+###### Writer writer = client.sendMessageData();
+
+* Se comprueba que el correo se haya enviado correctamente.
+
+###### boolean exito = client.completePendingCommand();
+###### if (!exito)
 
 ### Pruebas de Funcionamiento
 
