@@ -17,3 +17,15 @@ Módulo: PSP
 #### Comandos SMTP
 
 ### Pruebas de funcionamiento
+
+![img.png](img/insertarSMTP.png)
+
+![img.png](img/getSMTP.png)
+
+![img.png](img/updateSMTP.png)
+
+![img.png](img/getSMTP2.png)
+
+![img.png](img/deleteSMTP.png)
+
+![img.png](img/getSMTP3.png)
