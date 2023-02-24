@@ -1,6 +1,7 @@
 package appVGShop.gestionUsuarios.infra.controller;
 
 import appVGShop.gestionUsuarios.domain.dto.EmployeeDTOCreator;
+import appVGShop.gestionUsuarios.domain.dto.LoginDTO;
 import appVGShop.shared.config.EndpointUrls;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,4 +70,7 @@ public interface EmployeeAPI {
      */
     @DeleteMapping(EndpointUrls.DeleteUser)
     public ResponseEntity<?> deleteUser(@PathVariable Integer id);
+
+    @GetMapping(EndpointUrls.Login)
+    public ResponseEntity<?> login(@RequestBody LoginDTO login);
 }

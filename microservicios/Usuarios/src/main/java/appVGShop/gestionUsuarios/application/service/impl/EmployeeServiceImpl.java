@@ -5,6 +5,7 @@ import appVGShop.gestionUsuarios.application.service.EmployeeService;
 import appVGShop.gestionUsuarios.domain.Employee;
 import appVGShop.gestionUsuarios.domain.dto.EmployeeDTO;
 import appVGShop.gestionUsuarios.domain.dto.EmployeeDTOCreator;
+import appVGShop.gestionUsuarios.domain.dto.LoginDTO;
 import appVGShop.gestionUsuarios.infra.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.net.smtp.AuthenticatingSMTPClient;
@@ -17,12 +18,10 @@ import org.springframework.beans.factory.annotation.*;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
-import java.io.IOException;
-import java.io.Writer;
-import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -140,6 +139,45 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return ResponseEntity.noContent().build(); //Devuelve un ResponseEntity 204 con que no hay contenido.
 
+    }
+
+    @Override
+    public ResponseEntity<?> login(LoginDTO login) {
+        List<Employee> employeeList = employeeRepository.findAll();
+
+        try {
+            for (Employee employee : employeeList) {
+                if (employee.getCorreoEmpleado().equals(login.getCorreoEmpleado())) {
+                    //Obtener texto de clave
+                    URL resourcekey = getClass().getClassLoader().getResource("clave.txt");
+                    if (resourcekey == null) {
+                        throw new IllegalArgumentException("No se encuentra el archivo.");
+                    } else {
+                        File archivoclave = new File(resourcekey.toURI());
+                        FileReader frclave = new FileReader(archivoclave);
+                        BufferedReader brclave = new BufferedReader(frclave);
+                        String clave = brclave.readLine();
+
+                        MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+                        byte[] bytespass = login.getPasswdEmpleado().getBytes();
+                        md.update(bytespass);
+                        byte[] resumenpass = md.digest(clave.getBytes());
+                        String loginpass = new String(resumenpass);
+
+                        if (loginpass.equals(employee.getPasswdEmpleado())) {
+                            return ResponseEntity.ok().build();
+                        } else {
+                            return ResponseEntity.status(HttpStatus.CONFLICT).body("Contraseña incorrecta.");
+                        }
+                    }
+                }
+            }
+        } catch (URISyntaxException | IOException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
     @Override

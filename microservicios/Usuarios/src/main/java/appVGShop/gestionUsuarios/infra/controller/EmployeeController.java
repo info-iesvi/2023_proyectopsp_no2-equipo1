@@ -2,6 +2,7 @@ package appVGShop.gestionUsuarios.infra.controller;
 
 import appVGShop.gestionUsuarios.application.service.EmployeeService;
 import appVGShop.gestionUsuarios.domain.dto.EmployeeDTOCreator;
+import appVGShop.gestionUsuarios.domain.dto.LoginDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -63,6 +64,11 @@ public class EmployeeController implements EmployeeAPI {
     @Override
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         return employeeService.deleteUser(id);
+    }
+
+    @Override
+    public ResponseEntity<?> login(LoginDTO login) {
+        return employeeService.login(login);
     }
 
 }

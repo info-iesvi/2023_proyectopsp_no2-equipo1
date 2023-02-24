@@ -1,6 +1,7 @@
 package appVGShop.gestionUsuarios.application.service;
 
 import appVGShop.gestionUsuarios.domain.dto.EmployeeDTOCreator;
+import appVGShop.gestionUsuarios.domain.dto.LoginDTO;
 import org.springframework.http.ResponseEntity;
 
 public interface EmployeeService {
@@ -56,6 +57,8 @@ public interface EmployeeService {
      * @return 204 sin contenido.
      */
     public ResponseEntity<?> deleteUser(Integer id);
+
+    public ResponseEntity<?> login(LoginDTO login);
 
     /**
      * Método de enviado de notificaciones al gmail del servidor
