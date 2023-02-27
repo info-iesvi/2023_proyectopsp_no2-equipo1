@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.*;
 import java.net.URL;
 import java.security.MessageDigest;
+import java.util.Calendar;
 
 @RestController
 @AllArgsConstructor
@@ -48,6 +49,8 @@ public class EmployeeController implements EmployeeAPI {
                 byte[] resumenpass = md.digest(clave.getBytes());
 
                 newUserCreator.setPasswdEmpleado(new String(resumenpass));
+
+                generateAccessLog(newUserCreator.getNombreEmpleado(), "New User", "POST");
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -58,17 +61,44 @@ public class EmployeeController implements EmployeeAPI {
 
     @Override
     public ResponseEntity<?> editUser(EmployeeDTOCreator editData, Integer id) {
+        generateAccessLog(editData.getNombreEmpleado(), "Edit User", "PUT");
         return employeeService.editUser(editData, id);
+
     }
 
     @Override
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         return employeeService.deleteUser(id);
+
     }
 
     @Override
     public ResponseEntity<?> login(LoginDTO login) {
         return employeeService.login(login);
+    }
+
+    public void generateAccessLog(String user, String resource, String operation) {
+
+        try {
+            if (!new File("resources/accesos.log").exists()) {
+                FileWriter file = new FileWriter("accesos.log", true);
+                Calendar actualDate = Calendar.getInstance();
+                file.write("" + user
+                        + " - " + actualDate.get(Calendar.DAY_OF_MONTH)
+                        + "/" + (actualDate.get(Calendar.MONTH) + 1)
+                        + "/" + actualDate.get(Calendar.YEAR)
+                        + " - " + actualDate.get(Calendar.HOUR_OF_DAY)
+                        + ":" + actualDate.get(Calendar.MINUTE)
+                        + ":" + actualDate.get(Calendar.SECOND)
+                        + " - " + resource
+                        + " - " + operation
+                        + "\r\n");
+                file.close();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
 }
