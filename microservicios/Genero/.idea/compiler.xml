@@ -7,17 +7,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Genero" />
         <module name="2223_proyectopsp-equipo1" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Genero" target="19" />
       <module name="Videojuegos" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="2223_proyectopsp-equipo1" options="-parameters" />
+      <module name="Genero" options="-parameters" />
       <module name="Videojuegos" options="" />
     </option>
   </component>

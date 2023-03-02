@@ -1,70 +1,40 @@
 **FASE 1**
 
-* Creamos un contenedor para el proyecto:
+* Usando los pasos del hito anterior, debemos de aplicarlo para cada microservicio que creemos. Para esto, todos los servicios deben de tener su propio archivo Dockerfile. En nuestro caso quedaria de la siguiente manera:
+  
 
-  docker run -it -d --name proyecto-mysql -p 3306:3306 -e MYSQL_DATABASE=proyecto -e MYSQL_USER=usuario -e MYSQL_PASSWORD=usuario -e MYSQL_ROOT_PASSWORD=root mysql
-
-
-* Nos conectamos al contenedor:
-
-  docker exec -it proyecto-mysql /bin/bash
+    FROM openjdk:19
+    COPY target/xxx-1.0.0.jar /xxx.jar
+    CMD ["java", "-jar", "/xxx.jar"]
 
 
-* Entraremos al contenedor desde el terminal como usuario:
+![generodockerfile.png](img%2Fgenerodockerfile.png)
+![itemsdockerfile.png](img%2Fitemsdockerfile.png)
+![usuariosdockerfile.png](img%2Fusuariosdockerfile.png)
+![videojuegosdockerfile.png](img%2Fvideojuegosdockerfile.png)
 
-  mysql -u usuario -p -h 127.0.0.1
+* Una vez creados los dockerfiles, seguiremos los pasos del hito anterior, hasta llegar a los docker-compose, que en nuestro caso, solo tendremos uno que hace referencia a todos desde la carpeta raiz del proyecto. Quedando de la siguiente manera:
 
-  password: root
+![dockercompose1.png](img%2Fdockercompose1.png)
+![dockercompose2.png](img%2Fdockercompose2.png)
+![dockercompose3.png](img%2Fdockercompose3.png)
 
+* Y seguiremos con los pasos del hito anterior, creando una imagen de cada dockerfile, tras hacer el "clean", "compile" e "install", y haciendo el push de cada imagen compilada.
 
-* Usaremos proyecto:
-
-  use proyecto
-
-
-* Estará vacía la tabla, dado que no ha sido inicializada:
-
-
-* Creamos el contenedor phpmyadmin y lo enlazamos con el mysql que creamos previamente:
-
-  docker run --name phpmyadmin -d --link proyecto-mysql:db -p 8081:80 phpmyadmin/phpmyadmin
-
-
-* Accedemos (Los dos contenedores deben estar inicializados) al localhost:8081 e iniciamos como Usuario:usuario / Contraseña:usuario
-
-**FASE 2**
-
-* Creamos el fichero Dockerfile al mismo nivel que la carpeta src:
-
-  FROM openjdk:19
-
-  EXPOSE 8080
-
-  ARG JAR_FILE=target/2223_proyectopsp-equipo1-1.0-SNAPSHOT.jar
-
-  ADD ${JAR_FILE} app.jar
-
-  ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+![generojars.png](img%2Fgenerojars.png)
+![itemsjars.png](img%2Fitemsjars.png)
+![usuariosjars.png](img%2Fusuariosjars.png)
+![videojuegosjars.png](img%2Fvideojuegosjars.png)
 
 
-* Lanzamos la orden docker login y luego, creamos la imagen con la orden:
+* Encendemos el microservicio
 
-  docker build -t proyectopsp .
+![apagadomicro.png](img%2Fapagadomicro.png)
 
+![encendidomicro.png](img%2Fencendidomicro.png)
 
-* Una vez que tenemos la imagen creada, generamos una variante de nuestra imagen con el nombre deseado:
+* Y comprobaremos los microservicios
 
-  docker tag proyectopsp miguelchaves/proyectopsp:latest
-
-
-* Una vez generada la variante, la subimos al repositorio:
-
-  docker push miguelchaves/proyectopsp:latest
-
-
-* Una vez creada la imagen, creamos el contenedor con la orden:
-
-  docker run -it -d -p 8181:8080 --name proyectopsp miguelchaves/proyectopsp
-
-
-* Y al final, tendremos nuestra app dockerizada y la podremos ver en nuestro repositorio de Docker Hub.
+![generosget.png](img%2Fgenerosget.png)
+![itemsget.png](img%2Fitemsget.png)
+![videojuegosget.png](img%2Fvideojuegosget.png)
