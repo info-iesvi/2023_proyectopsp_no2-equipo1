@@ -11,6 +11,8 @@ import java.io.*;
 import java.net.URL;
 import java.security.*;
 import javax.crypto.*;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Calendar;
 
 @RestController
@@ -52,9 +54,10 @@ public class EmployeeController implements EmployeeAPI {
                 newUserCreator.setPasswdEmpleado(new String(resumenpass));
 
                 generateAccessLog(newUserCreator.getNombreEmpleado(), "New User", "POST");
-                generateSecretKey();
+                //generateSecretKey();
                 encryptSymmetricFile();
                 decryptSymmetricFile();
+                generateSignFile();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -62,6 +65,8 @@ public class EmployeeController implements EmployeeAPI {
 
         return employeeService.newUser(newUserCreator);
     }
+
+
 
     @Override
     public ResponseEntity<?> editUser(EmployeeDTOCreator editData, Integer id) {
@@ -104,132 +109,169 @@ public class EmployeeController implements EmployeeAPI {
         }
     }
 
-       public static void generateSecretKey() {
-        try {
-            KeyGenerator kg = KeyGenerator.getInstance("AES");
-            kg.init(128);
-
-            // Generate secret key
-            SecretKey key = kg.generateKey();
-
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("clave.secreta"));
-            out.writeObject(key);
-            out.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void encryptSymmetricFile() {
+
         try {
+            // RECUPERAMOS CLAVE SECRETA DEL FICHERO
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream("Clave.secreta"));
+            Key clavesecreta = (Key) oin.readObject();
+            oin.close();
 
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("clave.secreta"));
-            Key secretKey = (Key)in.readObject();
-
-
+            // SE DEFINE EL OBJETO Cipher para encriptar
             Cipher c = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            c.init(Cipher.ENCRYPT_MODE, secretKey);
+            c.init(Cipher.ENCRYPT_MODE, clavesecreta);
 
-            in = new ObjectInputStream(new FileInputStream("accesos.log"));
-            byte[] logFile = (byte[]) in.readObject();
-            in.close();
+            // FICHERO A CIFRAR
+            FileInputStream filein = new FileInputStream("accesos.log");
 
-            byte[] encryptedFile = c.doFinal(logFile);
-            System.out.println("Encrypted: " + new String(encryptedFile));
+            // OBJETO cipherOutputStream QUE ENCRIPTA EL FICHERO
+            CipherOutputStream out = new CipherOutputStream(new FileOutputStream("accesos_cifradosimetrico.log"), c);
+            int tambloque = c.getBlockSize(); // tamaÃ±o de bloque objeto Cipher
+            byte[] bytes = new byte[tambloque]; // bloque de bytes
 
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("accesos_cifradosimetrico.log"));
-            out.writeObject(encryptedFile);
+            // LEEMOS BLOQUES DE BYTES DEL FICHERO PDF
+            // Y LO VAMOS ESCRIBIENDO AL CipherOutputStream
+            int i = filein.read(bytes);
+            while (i != -1) {
+                out.write(bytes, 0, i);
+                i = filein.read(bytes);
+            }
+            out.flush();
             out.close();
+            filein.close();
+            System.out.println("Fichero cifrado con clave secreta.");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static void decryptSymmetricFile() {
+
         try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream("clave.secreta"));
-            Key secretKey = (Key) in.readObject();
+            //RECUPERAMOS CLAVE SECRETA DEL FICHERO
+            ObjectInputStream oin = new ObjectInputStream(new FileInputStream("clave.secreta"));
+            Key clavesecreta = (Key) oin.readObject();
+            oin.close();
 
+            //SE DEFINE EL OBJETO Cipher PARA DESENCRIPTAR
             Cipher c = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            c.init(Cipher.DECRYPT_MODE, secretKey);
+            c.init(Cipher.DECRYPT_MODE, clavesecreta);
 
-            in = new ObjectInputStream(new FileInputStream("accesos_cifradosimetrico.log"));
-            byte[] logFile = (byte[]) in.readObject();
+            //OBJETO CipherInputStream CUYO CONTENIDO SE VA A DESCIFRAR
+            CipherInputStream in = new CipherInputStream(new FileInputStream("accesos_cifradosimetrico.log"), c);
+
+            int tambloque = c.getBlockSize();   //tamaño de bloque
+            byte[] bytes = new byte[tambloque]; //bloque en bytes
+
+            //FICHERO CON EL CONTENIDO DESCIFRADO QUE SE CREARÁ
+            FileOutputStream fileout = new FileOutputStream("accesos_descifradosimetrico.log");
+
+            //LEEMOS BLOQUES DE BYTES DEL FICHERO cifrado
+            //Y LO VAMOS ESCRIBIENDO DESENCRIPTADOS AL FileOutputStream
+            int i = in.read(bytes);
+            while (i != -1) {
+                fileout.write(bytes, 0, i);
+                i = in.read(bytes);
+            }
+            fileout.close();
             in.close();
+            System.out.println("Fichero descifrado con clave secreta.");
 
-            byte[] decryptedFile = c.doFinal(logFile);
-            System.out.println("Decrypted: " + new String(decryptedFile));
+        } catch (Exception e ) {
+            e.printStackTrace();
+        }
 
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("accesos_descifradosimetrico.log"));
-            out.writeObject(decryptedFile);
-            out.close();
+    }
+
+    public static void generateSignFile() {
+        try {
+            //LECTURA DEL FICHERO DE CLAVE PRIVADA
+            FileInputStream inpriv = new FileInputStream("clave.privada");
+            byte[] bufferPriv = new byte[inpriv.available()];
+            inpriv.read(bufferPriv);
+            inpriv.close();
+
+            //RECUPERA CLAVE PRIVADA DESDE DATOS CODIFICADOS EN FORMATO PKCS8
+            PKCS8EncodedKeySpec clavePrivadaSpec = new PKCS8EncodedKeySpec(bufferPriv);
+            KeyFactory keyDSA = KeyFactory.getInstance("DSA");
+            PrivateKey clavePrivada = keyDSA.generatePrivate(clavePrivadaSpec);
+
+            //INICIANDO FIRMA CON CLAVE PRIVADA
+            Signature dsa = Signature.getInstance("SHA256withDSA");
+            dsa.initSign(clavePrivada);
+
+            //LECTURA DEL FICHERO A FIRMAR
+            //Se suministra al objeto Signature los datos a firmar
+            FileInputStream ficheroAFirmar = new FileInputStream("accesos.log");
+            BufferedInputStream bis = new BufferedInputStream(ficheroAFirmar);
+            byte[] buffer = new byte[bis.available()];
+            int len;
+
+            while ((len = bis.read(buffer)) >= 0) {
+                dsa.update(buffer, 0, len);
+            }
+
+            bis.close();
+
+            //GENERA LA FIRMA EN OTRO DE LOS DATOS DEL FICHERO
+            byte[] firma = dsa.sign();
+
+            //GUARDA LA FIRMA EN OTRO FICHERO
+            FileOutputStream fos = new FileOutputStream("accesos.firma");
+            fos.write(firma);
+            fos.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            //LECTURA DE LA CLAVE PÚBLICA DEL FICHERO
+            FileInputStream inpub = new FileInputStream("clave.publica");
+            byte[] bufferPub = new byte[inpub.available()];
+            inpub.read(bufferPub);  //lectura de bytes
+            inpub.close();
+
+            //RECUPERA CLAVE PUBLICA DESDE DATOS CODIFICADOS EN FORMATO X509
+            KeyFactory keyDSA = KeyFactory.getInstance("DSA");
+            X509EncodedKeySpec clavePublicaSpec = new X509EncodedKeySpec(bufferPub);
+            PublicKey clavePublica = keyDSA.generatePublic(clavePublicaSpec);
+
+            //LECTURA DEL FICHERO QUE CONTIENE LA FIRMA
+            FileInputStream firmafic = new FileInputStream("accesos.firma");
+            byte[] firma = new byte[firmafic.available()];
+            firmafic.read(firma);
+            firmafic.close();
+
+            //INICIALIZA EL OBJETO Signature CON CLAVE PÚBLICA PARA VERIFICAR
+            Signature dsa = Signature.getInstance("SHA256withDSA");
+            dsa.initVerify(clavePublica);
+
+            //LECTURA DEL FICHERO QUE CONTIENE LOS DATOS A VERIFICAR
+            //Se suministra al objeto Signature los datos a verificar
+            FileInputStream ficheroOriginal = new FileInputStream("accesos.log");
+            BufferedInputStream bis = new BufferedInputStream(ficheroOriginal);
+            byte[] buffer = new byte[bis.available()];
+            int len;
+
+            while ((len = bis.read(buffer)) >= 0) {
+                dsa.update(buffer, 0, len);
+            }
+            bis.close();
+
+            //VERIFICA LA FIRMA DE LOS DATOS LEIDOS
+            boolean verifica = dsa.verify(firma);
+
+            //COMPROBAR LA VERIFICACIÓN
+            if (verifica) {
+                System.out.println("LOS DATOS SE CORRESPONDEN CON SU FIRMA.");
+            } else {
+                System.out.println("LOS DATOS NO SE CORRESPONDEN CON SU FIRMA");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-/*
-    public static void generatePairKeysAndSignFile() {
-        try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(1024);
-
-            KeyPair pair = keyGen.generateKeyPair();
-            PrivateKey privateKey = pair.getPrivate();
-            PublicKey publicKey = pair.getPublic();
-
-            // Read the target file
-            byte[] logFile = (byte[]) readFile("access.log");
-
-            // Sign the file with the private key
-            // Give the data to the Signature object
-            Signature dsa = Signature.getInstance("SHA256withDSA");
-            dsa.initSign(privateKey);
-            dsa.update(logFile);
-
-            // The signed file contents
-            byte[] sign = dsa.sign();
-
-            // Write the signed file in a binary file
-//            FileOutputStream outSign = new FileOutputStream("access.signature");
-//            outSign.write(sign);
-//            outSign.close();
-            writeFile("access.signature", sign);
-
-            // The message receiver verifies with the public key the signed contents
-            // The Signature object is provided the data to verify
-            Signature checkDSA = Signature.getInstance("SHA256withDSA");
-            checkDSA.initVerify(publicKey);
-            checkDSA.update(logFile);
-            boolean check = checkDSA.verify(sign);
-
-            if (check) {
-                //OK
-                System.out.println("Verified signature with the public key");
-            } else {
-                System.out.println("ERROR: Signature not verified");
-            }
-
-            PKCS8EncodedKeySpec pkcs8Spec = new PKCS8EncodedKeySpec(privateKey.getEncoded());
-
-            // Write the private key in a binary file
-//            FileOutputStream outpriv = new FileOutputStream("key.private");
-//            outpriv.write(pkcs8Spec.getEncoded());
-//            outpriv.close();
-            writeFile("key.private", pkcs8Spec.getEncoded());
-
-            X509EncodedKeySpec pkX509 = new X509EncodedKeySpec(publicKey.getEncoded());
-
-            // Write public key in a binary file
-//            FileOutputStream outpub = new FileOutputStream("key.public");
-//            outpub.write(pkX509.getEncoded());
-//            outpub.close();
-            writeFile("key.public", pkX509.getEncoded());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-*/
 }
