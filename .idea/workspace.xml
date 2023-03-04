@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+<<<<<<< HEAD
+    <list default="true" id="c2a9c422-c2ec-4fdb-9380-a794770a7d5c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/2023_proyectopsp_no2-equipo1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/2023_proyectopsp_no2-equipo1.iml" afterDir="false" />
+    </list>
+=======
+    <list default="true" id="29a87656-bb67-4b00-92d1-33719c83fe25" name="Changes" comment="" />
+>>>>>>> origin/main
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+<<<<<<< HEAD
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2MVnBXcXzCdbdPFmTPwGCJK6H9Z" />
+=======
+  <component name="ProjectId" id="2LmbxijG8fqs9Eow3SeT1Sy5onk" />
+>>>>>>> origin/main
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+<<<<<<< HEAD
+    "last_opened_file_path": "C:/Users/mchar/OneDrive/Escritorio/PSP/proyectopsp2223equipo1/2023_proyectopsp_no2-equipo1/microservicios/Usuarios",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
+=======
+    "last_opened_file_path": "E:/IdeaProyects/2023_proyectopsp_no2-equipo1/microservicios"
+>>>>>>> origin/main
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+<<<<<<< HEAD
+      <changelist id="c2a9c422-c2ec-4fdb-9380-a794770a7d5c" name="Changes" comment="" />
+      <created>1677861481468</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1677861481468</updated>
+=======
+      <changelist id="29a87656-bb67-4b00-92d1-33719c83fe25" name="Changes" comment="" />
+      <created>1676479456560</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1676479456560</updated>
+>>>>>>> origin/main
+    </task>
+    <servers />
+  </component>
+</project>
