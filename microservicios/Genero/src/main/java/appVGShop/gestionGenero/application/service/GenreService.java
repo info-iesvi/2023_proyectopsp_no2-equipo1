@@ -39,4 +39,5 @@ public interface GenreService {
      * @return 204 sin contenido
      */
     public ResponseEntity<?> deleteGenre(Integer id);
+
 }

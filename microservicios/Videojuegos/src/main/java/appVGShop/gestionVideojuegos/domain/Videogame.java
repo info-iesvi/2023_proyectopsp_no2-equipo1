@@ -25,4 +25,5 @@ public class Videogame {
     private String descripcionVg;
     private LocalDate fechaLanzVg;
     private Integer pegi;
+
 }

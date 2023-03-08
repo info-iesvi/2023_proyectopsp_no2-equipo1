@@ -18,11 +18,11 @@
       <module name="2223_proyectopsp-equipo1" target="19" />
       <module name="2223_proyectopsp-equipo1 (1)" target="19" />
       <module name="2223_proyectopsp-equipo1 (2)" target="19" />
-      <module name="Genero" target="17" />
-      <module name="Items" target="17" />
-      <module name="microservicios" target="17" />
-      <module name="Usuarios" target="17" />
-      <module name="Videojuegos" target="17" />
+      <module name="Genero" target="11" />
+      <module name="Items" target="11" />
+      <module name="microservicios" target="11" />
+      <module name="Usuarios" target="11" />
+      <module name="Videojuegos" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

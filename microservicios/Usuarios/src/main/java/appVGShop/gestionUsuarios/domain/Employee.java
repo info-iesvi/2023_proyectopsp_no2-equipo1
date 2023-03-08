@@ -23,7 +23,6 @@ public class Employee {
     private String nombreEmpleado; //Nombre
     private String correoEmpleado; //Correo electrónico
     private String passwdEmpleado; //Contraseña para el sistema
-
     private Boolean esSuperior; //Determina si el empleado es gerente o no
 
 }

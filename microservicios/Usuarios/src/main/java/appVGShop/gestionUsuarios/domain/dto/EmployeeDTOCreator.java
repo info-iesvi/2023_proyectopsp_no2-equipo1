@@ -9,7 +9,6 @@ public class EmployeeDTOCreator {
     private String nombreEmpleado;
     private String correoEmpleado;
     private String passwdEmpleado;
-
     private Boolean esSuperior;
 
 }

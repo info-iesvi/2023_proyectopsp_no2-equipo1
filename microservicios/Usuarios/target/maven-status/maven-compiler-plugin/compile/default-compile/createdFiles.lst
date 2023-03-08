@@ -1,4 +1,5 @@
 appVGShop\gestionUsuarios\application\service\impl\EmployeeServiceImpl.class
+appVGShop\gestionUsuarios\domain\dto\LoginDTO.class
 appVGShop\shared\config\EndpointUrls.class
 appVGShop\gestionUsuarios\application\converter\EmployeeDTOConverter.class
 appVGShop\gestionUsuarios\domain\dto\EmployeeDTO.class

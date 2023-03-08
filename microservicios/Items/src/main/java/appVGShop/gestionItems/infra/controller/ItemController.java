@@ -12,7 +12,6 @@ public class ItemController implements ItemAPI {
     @Autowired
     private ItemService itemService;
 
-
     @Override
     public ResponseEntity<?> getAll() {
         return itemService.getAll();

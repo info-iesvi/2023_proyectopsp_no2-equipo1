@@ -7,6 +7,7 @@ import lombok.*;
 public class EmployeeDTO {
 
     private int empleadoID;
+
     private String nombreEmpleado;
     private String correoEmpleado;
     private String passwdEmpleado;

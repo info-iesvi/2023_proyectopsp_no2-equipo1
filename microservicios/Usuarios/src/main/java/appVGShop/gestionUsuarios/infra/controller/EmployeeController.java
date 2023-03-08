@@ -4,6 +4,7 @@ import appVGShop.gestionUsuarios.application.service.EmployeeService;
 import appVGShop.gestionUsuarios.domain.dto.EmployeeDTOCreator;
 import appVGShop.gestionUsuarios.domain.dto.LoginDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +19,10 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Calendar;
 
 @RestController
-@AllArgsConstructor
 public class EmployeeController implements EmployeeAPI {
 
-    private final EmployeeService employeeService;
+    @Autowired
+    private EmployeeService employeeService;
 
     @Override
     public ResponseEntity<?> getAll() {

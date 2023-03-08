@@ -1,60 +1,8 @@
 version: '3'
 services:
-  usuarios:
-    image: 'miguelchaves/proyectopsp-equipo1:Usuarios'
-    container_name: microservicios-usuarios
-    environment:
-      spring.datasource.url: jdbc:mysql://microservicios-db:3306/proyecto
-      spring.datasource.username: usuario
-      spring.datasource.password: usuario
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    links:
-      - db
-  videojuegos:
-    image: 'miguelchaves/proyectopsp-equipo1:Videojuegos'
-    container_name: microservicios-videojuegos
-    environment:
-      spring.datasource.url: jdbc:mysql://microservicios-db:3306/proyecto
-      spring.datasource.username: usuario
-      spring.datasource.password: usuario
-    ports:
-      - "8081:8081"
-    depends_on:
-      - db
-    links:
-      - db
-  items:
-    image: 'miguelchaves/proyectopsp-equipo1:Items'
-    container_name: microservicios-items
-    environment:
-      spring.datasource.url: jdbc:mysql://microservicios-db:3306/proyecto
-      spring.datasource.username: usuario
-      spring.datasource.password: usuario
-    ports:
-      - "8082:8082"
-    depends_on:
-      - db
-    links:
-      - db
-  generos:
-    image: 'miguelchaves/proyectopsp-equipo1:Genero'
-    container_name: microservicios-generos
-    environment:
-      spring.datasource.url: jdbc:mysql://microservicios-db:3306/proyecto
-      spring.datasource.username: usuario
-      spring.datasource.password: usuario
-    ports:
-      - "8083:8083"
-    depends_on:
-      - db
-    links:
-      - db
-  db:
+  database:
     image: mysql:latest
-    container_name: microservicios-db
+    container_name: microservicios_db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: usuario
@@ -62,3 +10,63 @@ services:
       MYSQL_DATABASE: proyecto
     ports:
       - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+  usuarios:
+    image: 'miguelchaves/proyectopsp-equipo1:Usuarios'
+    container_name: usuarios
+    environment:
+      spring.datasource.url: jdbc:mysql://microservicios_db:3306/proyecto
+      spring.datasource.username: usuario
+      spring.datasource.password: usuario
+    ports:
+      - "8091:8083"
+    depends_on:
+      database:
+        condition: service_healthy
+    links:
+      - database
+  videojuegos:
+    image: 'miguelchaves/proyectopsp-equipo1:Videojuegos'
+    container_name: videojuegos
+    environment:
+      spring.datasource.url: jdbc:mysql://microservicios_db:3306/proyecto
+      spring.datasource.username: usuario
+      spring.datasource.password: usuario
+    ports:
+      - "8092:8083"
+    depends_on:
+      database:
+        condition: service_healthy
+    links:
+      - database
+  items:
+    image: 'miguelchaves/proyectopsp-equipo1:Items'
+    container_name: items
+    environment:
+      spring.datasource.url: jdbc:mysql://microservicios_db:3306/proyecto
+      spring.datasource.username: usuario
+      spring.datasource.password: usuario
+    ports:
+      - "8093:8083"
+    depends_on:
+      database:
+        condition: service_healthy
+    links:
+      - database
+  generos:
+    image: 'miguelchaves/proyectopsp-equipo1:Genero'
+    container_name: generos
+    environment:
+      spring.datasource.url: jdbc:mysql://microservicios_db:3306/proyecto
+      spring.datasource.username: usuario
+      spring.datasource.password: usuario
+    ports:
+      - "8094:8083"
+    depends_on:
+      database:
+        condition: service_healthy
+    links:
+      - database

@@ -27,11 +27,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
-    private final EmployeeRepository employeeRepository; //Declaración del repositorio de empleados
+    private EmployeeRepository employeeRepository; //Declaración del repositorio de empleados
 
     @Autowired
     private EmployeeDTOConverter userDTOConverter; //Declaración del convertidor

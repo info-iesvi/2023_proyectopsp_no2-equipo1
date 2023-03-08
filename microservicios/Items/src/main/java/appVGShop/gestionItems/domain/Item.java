@@ -20,4 +20,5 @@ public class Item {
     private String nombreItem;
     private String descripcionItem;
     private Boolean esElectronico;
+
 }

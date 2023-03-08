@@ -23,7 +23,6 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private ItemDTOConverter itemDTOConverter;
 
-
     @Override
     public ResponseEntity<?> getAll() {
         List<Item> itemList = itemRepository.findAll();

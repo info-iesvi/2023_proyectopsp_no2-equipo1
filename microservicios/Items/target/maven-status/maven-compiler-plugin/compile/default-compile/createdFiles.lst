@@ -1,0 +1,12 @@
+appVGShop\gestionItems\infra\controller\ItemController.class
+appVGShop\shared\config\EndpointUrls.class
+appVGShop\gestionItems\infra\ItemRepository.class
+appVGShop\shared\config\BaseConfiguration.class
+appVGShop\gestionItems\domain\dto\ItemDTO.class
+appVGShop\gestionItems\infra\controller\ItemAPI.class
+appVGShop\gestionItems\domain\Item.class
+appVGShop\gestionItems\application\service\impl\ItemServiceImpl.class
+appVGShop\gestionItems\application\converter\ItemDTOConverter.class
+appVGShop\gestionItems\application\service\ItemService.class
+appVGShop\Application.class
+appVGShop\gestionItems\domain\dto\ItemDTOCreator.class
